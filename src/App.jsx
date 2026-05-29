@@ -1,4 +1,4 @@
-import TopBar from './components/TopBar'
+import TopBar from './components/Topbar'
 import CateringPage from './pages/CateringPage'
 
 function App() {

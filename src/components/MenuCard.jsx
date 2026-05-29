@@ -1,4 +1,4 @@
-import { Box, Image, Text, Badge } from '@chakra-ui/react'
+import { Box, Image, Text } from '@chakra-ui/react'
 
 const MenuCard = ({ item }) => {
   return (

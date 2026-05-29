@@ -1,4 +1,4 @@
-import { Box, Flex, Text, HStack, Icon } from '@chakra-ui/react'
+import { Box, Flex, Text, HStack } from '@chakra-ui/react'
 
 const TopBar = () => {
   return (

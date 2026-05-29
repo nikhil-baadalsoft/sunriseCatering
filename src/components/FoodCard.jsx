@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Heading, Button, Image, Badge, SimpleGrid } from '@chakra-ui/react'
+import { Box, Flex, Text, Button, Image, Badge } from '@chakra-ui/react'
 const FoodCard = ({ item,captureEvent}) => {
   return (
     <Box
