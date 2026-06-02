@@ -61,12 +61,12 @@ const CateringPage = ({ captureEvent = () => {} }) => {
 
                 <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={6}>
                 {activeCategory === 'all' ? (
-                    allMenuItems.map((item) => (
-                        <MenuCard key={item.id} item={item} />
+                    allMenuItems.map((item, index) => (
+                        <MenuCard key={`${item.key}-${item.id}-${index}`} item={item} setActiveCategory={setActiveCategory}/>
                     ))
                 ) : (
-                    menuItems.map((item) => (
-                        <FoodCard key={item.id} item={item} captureEvent={captureEvent} />
+                    menuItems.map((item, index) => (
+                        <FoodCard key={`${activeCategory}-${item.id}-${index}`} item={item} captureEvent={captureEvent} />
                     ))
                 )}
                 </SimpleGrid>

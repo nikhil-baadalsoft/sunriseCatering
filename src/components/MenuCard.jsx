@@ -1,6 +1,6 @@
 import { Box, Image, Text } from '@chakra-ui/react'
 
-const MenuCard = ({ item }) => {
+const MenuCard = ({ item,setActiveCategory }) => {
   return (
     <Box
       position="relative"
@@ -14,6 +14,7 @@ const MenuCard = ({ item }) => {
         transform: 'translateY(-4px)',
         boxShadow: '2xl'
       }}
+       onClick={() => {setActiveCategory(item.key)}}
     >
       <Image
         src={item.image}
