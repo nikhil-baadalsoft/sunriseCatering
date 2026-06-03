@@ -1,7 +1,20 @@
 import { Box, Text, VStack, Separator } from '@chakra-ui/react'
 import { menuItems } from './menuItems'
+import { useContext } from 'react'
+import { EventCaptureContext } from '../context/EventCaptureContex'
 
 const Sidebar = ({ activeCategory, setActiveCategory }) => {
+  const { captureEvent } = useContext(EventCaptureContext)
+  const handleEventCapture = (key,eventname,eventSequence) => {
+    try {
+      setActiveCategory(key);
+      captureEvent(eventname, eventSequence);
+      
+
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
   return (
     <Box
       w={{ base: '100%', md: '260px' }}
@@ -41,7 +54,7 @@ const Sidebar = ({ activeCategory, setActiveCategory }) => {
           bg={activeCategory === 'all' ? 'white' : 'transparent'}
           _hover={{ bg: 'white', borderLeft: '3px solid #E8501A' }}
           transition="all 0.2s"
-          onClick={() => setActiveCategory('all')}
+          onClick={() => handleEventCapture('all',"ALL_CATERINGLIST_CLICK",3)}
         >
           All Categories
         </Text>
@@ -58,7 +71,7 @@ const Sidebar = ({ activeCategory, setActiveCategory }) => {
             bg={activeCategory === item.key ? 'white' : 'transparent'}
             _hover={{ bg: 'white', borderLeft: '3px solid #E8501A', color: '#1A1A1A' }}
             transition="all 0.2s"
-            onClick={() => setActiveCategory(item.key)}
+            onClick={() => handleEventCapture(item.key,"SIDEBAR_CATERING_CLICK",2)}
           >
             {item.name}
           </Text>

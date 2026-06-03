@@ -1,7 +1,16 @@
 import { Box, Flex, Text, Button, Image, Badge, NumberInput, VStack, HStack } from '@chakra-ui/react'
 import { useState, useContext } from 'react'
 import { CartContext } from "../context/cartStore"
-const FoodCard = ({ item, captureEvent }) => {
+import { EventCaptureContext } from '../context/EventCaptureContex'
+const FoodCard = ({ item }) => {
+    const { captureEvent } = useContext(EventCaptureContext)
+    const handleEventCapture = (eventname,eventSequence) => {
+    try {
+      captureEvent(eventname, eventSequence);
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
     const [quantity, setQuantity] = useState(1);
     const { setCartItems } = useContext(CartContext);
 
@@ -16,10 +25,10 @@ const FoodCard = ({ item, captureEvent }) => {
                         : i
                 );
             }
-
+            
             return [...prev, { ...item, quantity }];
         });
-        captureEvent("Select Order");
+        handleEventCapture("CATERING_ADD_TO_ORDER",4)
     }
     return (
         <Box

@@ -3,9 +3,19 @@ import { FiShoppingCart } from "react-icons/fi";
 import { useContext } from 'react'
 import { CartContext } from "../context/cartStore"
 import {useNavigate } from 'react-router-dom';
+import { EventCaptureContext } from '../context/EventCaptureContex'
 const TopBar = () => {
     const { cartItems } = useContext(CartContext);
     const navigate = useNavigate();
+    const { captureEvent } = useContext(EventCaptureContext)
+    const handleEventCapture = (eventname,eventSequence) => {
+    try {
+      captureEvent(eventname, eventSequence);
+      navigate("/cart")
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
     return (
         <Box bg="#E8501A" px={{ base: 4, md: 12, lg: 20 }} py={3}>
             <Flex justify="space-between" align="center" maxW="1400px" mx="auto">
@@ -51,7 +61,7 @@ const TopBar = () => {
                         justifyContent="center"
                         fontSize="xs"
                         fontWeight="700"
-                        onClick={()=>{navigate("/cart")}}
+                        onClick={()=>{handleEventCapture("CATERING_ADD_TO_CART",5)}}
                     >
                         {cartItems.length}
                     </Box>

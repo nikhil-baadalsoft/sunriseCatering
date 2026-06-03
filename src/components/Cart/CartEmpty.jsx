@@ -1,10 +1,20 @@
 import { Box, Text, Button, VStack, Icon, Flex } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-
+import { EventCaptureContext } from '../../context/EventCaptureContex'
+import { useContext } from "react";
 const CartEmpty = () => {
   const navigate = useNavigate();
-
+  const { captureEvent } = useContext(EventCaptureContext)
+  
+    const handleEventCapture = (key) => {
+      try {
+        captureEvent("CATERING_BROWSE_MENU", 6);
+        navigate("/")
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
   return (
     <Flex
       minH="93vh"
@@ -61,7 +71,7 @@ const CartEmpty = () => {
               boxShadow: "md"
             }}
             transition="all 0.2s"
-            onClick={() => navigate("/")}
+            onClick={() =>{ handleEventCapture()}}
           >
             Browse Menu
           </Button>

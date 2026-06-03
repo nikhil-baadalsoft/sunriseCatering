@@ -1,6 +1,19 @@
 import { Box, Image, Text } from '@chakra-ui/react'
+import { useContext } from 'react'
+import { EventCaptureContext } from '../context/EventCaptureContex'
 
-const MenuCard = ({ item,setActiveCategory }) => {
+const MenuCard = ({ item, setActiveCategory }) => {
+  const { captureEvent } = useContext(EventCaptureContext)
+
+  const handleEventCapture = (key) => {
+    try {
+      setActiveCategory(key);
+      captureEvent("CATERING_LIST_CLICK", 1);
+
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
   return (
     <Box
       position="relative"
@@ -14,7 +27,7 @@ const MenuCard = ({ item,setActiveCategory }) => {
         transform: 'translateY(-4px)',
         boxShadow: '2xl'
       }}
-       onClick={() => {setActiveCategory(item.key)}}
+      onClick={() => { handleEventCapture(item.key) }}
     >
       <Image
         src={item.image}
@@ -34,7 +47,6 @@ const MenuCard = ({ item,setActiveCategory }) => {
         bgGradient="linear(to-t, blackAlpha.800, transparent)"
       />
 
-      {/* NEW Badge */}
       {item.badge && (
         <Box
           position="absolute"

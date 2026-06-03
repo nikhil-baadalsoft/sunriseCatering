@@ -12,7 +12,7 @@ import { SidesandSweets } from "../components/data/SidesandSweets"
 import { menuItems as allMenuItems } from '../components/menuItems'
 
 
-const CateringPage = ({ captureEvent = () => {} }) => {
+const CateringPage = () => {
     const [activeCategory, setActiveCategory] = useState('all')
 
     const getData = () => {
@@ -66,7 +66,7 @@ const CateringPage = ({ captureEvent = () => {} }) => {
                     ))
                 ) : (
                     menuItems.map((item, index) => (
-                        <FoodCard key={`${activeCategory}-${item.id}-${index}`} item={item} captureEvent={captureEvent} />
+                        <FoodCard key={`${activeCategory}-${item.id}-${index}`} item={item}  />
                     ))
                 )}
                 </SimpleGrid>
