@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
-
+import { useRef } from 'react';
 import { useEffect } from 'react';
 function App() {
 const EVENT_MAP_KEY = "EVENT_MAP";
