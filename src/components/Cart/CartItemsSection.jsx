@@ -9,17 +9,26 @@ const CartItemsSection = () => {
     0,
   );
 
-  const handleQuantityChange = (cartItemId, value) => {
-    const qty = Number(value);
-
-    setCartItems(prev =>
-      prev.map(item =>
-        item.cartItemId === cartItemId
-          ? { ...item, quantity: qty < 1 ? 1 : qty }
-          : item
-      )
-    );
-  };
+  const handleQuantityChange = (
+  cartItemId,
+  value
+) => {
+  const qty = Math.max(
+    1,
+    Number(value || 1)
+  );
+ 
+  setCartItems((prev) =>
+    prev.map((item) =>
+      item.cartItemId === cartItemId
+        ? {
+            ...item,
+            quantity: qty,
+          }
+        : item
+    )
+  );
+};
 
   const removeItem = (cartItemId) => {
     setCartItems(prev => prev.filter(item => item.cartItemId !== cartItemId));
