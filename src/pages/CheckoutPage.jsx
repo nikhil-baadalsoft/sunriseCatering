@@ -14,16 +14,16 @@ import {
  
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { EventCaptureContext } from '../context/EventCaptureContex'
+import { EventCaptureContext } from '../context/eventCaptureStore'
 import { useContext } from "react";
  
  
 const CheckoutPage = () => {
   const location = useLocation();
   const { captureEvent } = useContext(EventCaptureContext);
-   const handleEventCapture = (eventname,eventSequence) => {
+   const handleEventCapture = (eventname) => {
       try {
-        captureEvent(eventname, eventSequence);
+        captureEvent(eventname);
 
       } catch (error) {
         console.log(error.message)

@@ -1,7 +1,9 @@
-import { createContext } from "react";
+import { useCallback } from "react";
 import axios from "axios";
+import { EventCaptureContext } from "./eventCaptureStore";
 
-export const EventCaptureContext = createContext();
+const EVENT_COUNTER_KEY = "EVENT_COUNTER";
+const EVENT_MAP_KEY = "EVENT_MAP";
 
 
 export const EventCaptureProvider = ({ children }) => {
@@ -31,7 +33,7 @@ export const EventCaptureProvider = ({ children }) => {
     return "DESKTOP";
   };
 
-  const currentPage =
+  const getCurrentPage = () =>
     window.location.pathname === "/"
       ? "HOME"
       : window.location.pathname === "/cart"
@@ -42,7 +44,34 @@ export const EventCaptureProvider = ({ children }) => {
       ? "ORDER_SUCCESS"
       : "OTHER";
 
-  const captureEvent = async (eventname, eventSequence = 1) => {
+  const resetEventSequence = useCallback(() => {
+    sessionStorage.removeItem(EVENT_MAP_KEY);
+    sessionStorage.setItem(EVENT_COUNTER_KEY, "1");
+  }, []);
+
+  const getNextEventSequence = (eventName) => {
+    let savedEventMap;
+
+    try {
+      savedEventMap = JSON.parse(sessionStorage.getItem(EVENT_MAP_KEY)) || {};
+    } catch {
+      savedEventMap = {};
+    }
+
+    if (savedEventMap[eventName] !== undefined) {
+      return savedEventMap[eventName];
+    }
+
+    const currentCounter = Number(sessionStorage.getItem(EVENT_COUNTER_KEY)) || 1;
+    savedEventMap[eventName] = currentCounter;
+
+    sessionStorage.setItem(EVENT_MAP_KEY, JSON.stringify(savedEventMap));
+    sessionStorage.setItem(EVENT_COUNTER_KEY, String(currentCounter + 1));
+
+    return currentCounter;
+  };
+
+  const captureEvent = useCallback(async (eventname) => {
     try {
       const queryParams = new URLSearchParams(window.location.search);
 
@@ -53,12 +82,14 @@ export const EventCaptureProvider = ({ children }) => {
         sessionStorage.setItem("sessionId", sessionId);
       }
 
+      const eventSequence = getNextEventSequence(eventname);
+
       const payload = {
         eventName: eventname,
         eventSequence,
         eventTimestamp: new Date().toISOString(),
         sessionId,
-        page: currentPage,
+        page: getCurrentPage(),
         device: {
           browser: getBrowser(),
           operatingSystem: getOperatingSystem(),
@@ -87,10 +118,10 @@ export const EventCaptureProvider = ({ children }) => {
     } catch (error) {
       console.log(error.message);
     }
-  };
+  }, []);
 
   return (
-    <EventCaptureContext.Provider value={{ captureEvent }}>
+    <EventCaptureContext.Provider value={{ captureEvent, resetEventSequence }}>
       {children}
     </EventCaptureContext.Provider>
   );

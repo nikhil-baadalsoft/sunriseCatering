@@ -1,7 +1,7 @@
 // import { Box, Flex, Text, Button, Image, Badge, NumberInput, VStack, HStack } from '@chakra-ui/react'
 // import { useState, useContext } from 'react'
 // import { CartContext } from "../context/cartStore"
-// import { EventCaptureContext } from '../context/EventCaptureContex'
+// import { EventCaptureContext } from '../context/eventCaptureStore'
 // const FoodCard = ({ item }) => {
 //     const { captureEvent } = useContext(EventCaptureContext)
 //     const handleEventCapture = (eventname,eventSequence) => {
@@ -151,11 +151,13 @@ import {
 } from "@chakra-ui/react";
 import { useState, useContext } from "react";
 import { CartContext } from "../context/cartStore";
- 
-const FoodCard = ({ item, captureEvent }) => {
+import { EventCaptureContext } from '../context/eventCaptureStore'
+const FoodCard = ({ item }) => {
   const [quantity, setQuantity] = useState(1);
  
   const { setCartItems } = useContext(CartContext);
+  const { captureEvent } = useContext(EventCaptureContext)
+
  
   const handleCart = () => {
     setCartItems((prev) => {
@@ -186,7 +188,7 @@ const FoodCard = ({ item, captureEvent }) => {
       ];
     });
  
-    captureEvent("Select Order");
+    captureEvent("SELECT_ORDER");
   };
  
   return (

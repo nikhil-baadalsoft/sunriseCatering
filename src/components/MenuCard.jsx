@@ -1,6 +1,6 @@
 import { Box, Image, Text } from '@chakra-ui/react'
 import { useContext } from 'react'
-import { EventCaptureContext } from '../context/EventCaptureContex'
+import { EventCaptureContext } from '../context/eventCaptureStore'
 
 const MenuCard = ({ item, setActiveCategory }) => {
   const { captureEvent } = useContext(EventCaptureContext)
@@ -8,7 +8,7 @@ const MenuCard = ({ item, setActiveCategory }) => {
   const handleEventCapture = (key) => {
     try {
       setActiveCategory(key);
-      captureEvent("CATERING_LIST_CLICK", 1);
+      captureEvent("CATERING_LIST_CLICK");
 
     } catch (error) {
       console.log(error.message)

@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { EventCaptureContext } from '../../context/EventCaptureContex'
+import { EventCaptureContext } from '../../context/eventCaptureStore'
 import {
   Box,
   Text,
@@ -42,9 +42,9 @@ const CartCheckout = ({
  
   const navigate = useNavigate();
   const { captureEvent } = useContext(EventCaptureContext)
- const handleEventCapture = (eventname,eventSequence) => {
+ const handleEventCapture = (eventname) => {
       try {
-        captureEvent(eventname, eventSequence);
+        captureEvent(eventname);
 
       } catch (error) {
         console.log(error.message)

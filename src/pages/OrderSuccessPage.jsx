@@ -11,16 +11,16 @@ import {
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { EventCaptureContext } from '../context/EventCaptureContex'
+import { EventCaptureContext } from '../context/eventCaptureStore'
 
 const OrderSuccessPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { captureEvent } = useContext(EventCaptureContext);
-    const handleEventCapture = (eventname, eventSequence) => {
+    const handleEventCapture = (eventname) => {
         try {
             sessionStorage.removeItem("checkout-data");
-            captureEvent(eventname, eventSequence);
+            captureEvent(eventname);
             navigate("/");
 
         } catch (error) {

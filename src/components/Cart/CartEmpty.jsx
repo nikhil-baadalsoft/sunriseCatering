@@ -1,15 +1,15 @@
 import { Box, Text, Button, VStack, Icon, Flex } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { EventCaptureContext } from '../../context/EventCaptureContex'
+import { EventCaptureContext } from '../../context/eventCaptureStore'
 import { useContext } from "react";
 const CartEmpty = () => {
   const navigate = useNavigate();
   const { captureEvent } = useContext(EventCaptureContext)
   
-    const handleEventCapture = (key) => {
+    const handleEventCapture = () => {
       try {
-        captureEvent("CATERING_BROWSE_MENU", 6);
+        captureEvent("CATERING_BROWSE_MENU");
         navigate("/")
       } catch (error) {
         console.log(error.message)

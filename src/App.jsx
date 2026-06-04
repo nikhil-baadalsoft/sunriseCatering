@@ -5,95 +5,29 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import { useRef } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
+import { EventCaptureContext } from './context/eventCaptureStore'
+
 function App() {
-const EVENT_MAP_KEY = "EVENT_MAP";
-const EVENT_COUNTER_KEY = "EVENT_COUNTER";
+  const { captureEvent, resetEventSequence } = useContext(EventCaptureContext)
+  const hasTrackedLaunch = useRef(false);
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const sessionId = queryParams.get("sessionId");
-    sessionStorage.clear();
-    sessionStorage.setItem("sessionId",sessionId)
-  }, [])
+    if (hasTrackedLaunch.current) return;
 
-  const currentPageRef = useRef(window.location.pathname);
+    hasTrackedLaunch.current = true;
+    resetEventSequence();
+    captureEvent("CATERING_SITE_LAUNCHED");
+  }, [captureEvent, resetEventSequence])
+
   const hasTrackedExit = useRef(false);
-
-  useEffect(() => {
-    currentPageRef.current = window.location.pathname;
-  });
-
-  const trackExit = (targetPage) => {
-    let savedEventMap = {};
-
-    try {
-      savedEventMap =
-        JSON.parse(sessionStorage.getItem(EVENT_MAP_KEY)) || {};
-    } catch {
-      savedEventMap = {};
-    }
-
-    let currentCounter =
-      Number(sessionStorage.getItem(EVENT_COUNTER_KEY)) || 4;
-
-    let eventSequence;
-
-    if (savedEventMap["EXIT_PAGE"] !== undefined) {
-      eventSequence = savedEventMap["EXIT_PAGE"];
-    } else {
-      eventSequence = currentCounter;
-      savedEventMap["EXIT_PAGE"] = eventSequence;
-      currentCounter++;
-
-      try {
-        sessionStorage.setItem(
-          EVENT_MAP_KEY,
-          JSON.stringify(savedEventMap)
-        );
-        sessionStorage.setItem(
-          EVENT_COUNTER_KEY,
-          currentCounter.toString()
-        );
-      } catch {}
-    }
-
-    const payload = {
-      eventName: "EXIT_PAGE",
-      page: targetPage,
-      eventSequence,
-      eventTimestamp: new Date().toISOString(),
-      customerId: "",
-      sessionId,
-      device: {
-        browser: getBrowser(),
-        operatingSystem: getOperatingSystem(),
-        deviceType: getDeviceType(),
-      },
-      market: {
-        utmSource: queryParams.get("utm_source") || "DIRECT",
-        campaign: queryParams.get("utm_campaign") || "UNKNOWN",
-      },
-      referrer: {
-        url: window.location.href,
-        referrer: document.referrer || "DIRECT",
-      },
-    };
-
-    navigator.sendBeacon(
-      "https://app-customerevents-southindia-bud0d7e9a5akhuep.southindia-01.azurewebsites.net/api/v1/Events",
-      new Blob([JSON.stringify(payload)], {
-        type: "application/json",
-      })
-    );
-  };
 
   useEffect(() => {
     const handleExit = () => {
       if (hasTrackedExit.current) return;
 
       hasTrackedExit.current = true;
-      trackExit(currentPageRef.current);
+      captureEvent("EXIT_PAGE");
     };
 
     window.addEventListener("pagehide", handleExit);
@@ -103,13 +37,13 @@ const EVENT_COUNTER_KEY = "EVENT_COUNTER";
       window.removeEventListener("pagehide", handleExit);
       window.removeEventListener("beforeunload", handleExit);
     };
-  }, []);
+  }, [captureEvent]);
 
   return (
     <>
       <TopBar />
       <Routes>
-        <Route path="/" element={<CateringPage/>} />
+        <Route path="/" element={<CateringPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/order-success" element={<OrderSuccessPage />} />

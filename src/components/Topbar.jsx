@@ -3,14 +3,14 @@ import { FiShoppingCart } from "react-icons/fi";
 import { useContext } from 'react'
 import { CartContext } from "../context/cartStore"
 import {useNavigate } from 'react-router-dom';
-import { EventCaptureContext } from '../context/EventCaptureContex'
+import { EventCaptureContext } from '../context/eventCaptureStore'
 const TopBar = () => {
     const { cartItems } = useContext(CartContext);
     const navigate = useNavigate();
     const { captureEvent } = useContext(EventCaptureContext)
-    const handleEventCapture = (eventname,eventSequence) => {
+    const handleEventCapture = (eventname) => {
     try {
-      captureEvent(eventname, eventSequence);
+      captureEvent(eventname);
       navigate("/cart")
     } catch (error) {
       console.log(error.message)
@@ -44,7 +44,7 @@ const TopBar = () => {
                         SIGN UP
                     </Text>
                 </HStack>
-                <Box position="relative" cursor="pointer">
+                <Box position="relative" cursor="pointer" onClick={()=>{handleEventCapture("CATERING_ADD_TO_CART",4)}}>
                     <FiShoppingCart size={24} color="white" />
 
                     <Box
@@ -61,7 +61,6 @@ const TopBar = () => {
                         justifyContent="center"
                         fontSize="xs"
                         fontWeight="700"
-                        onClick={()=>{handleEventCapture("CATERING_ADD_TO_CART",5)}}
                     >
                         {cartItems.length}
                     </Box>
